@@ -153,7 +153,8 @@ var elopts = (function() {
       
       var result = {};
       
-      for (var i = arguments.length - 1, arg; arg = arguments[i]; i--) {
+      for (var i = arguments.length - 1; i >= 0; i--) {
+        var arg = arguments[i];
         var opts = getOptions.call(this, arg);
         result = deepExtend(result, opts);
       }
