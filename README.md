@@ -74,7 +74,9 @@ var options = elopts.newInstance({
   dataset: false, 
   cdata: false, 
   params: false
-})(element);
+})(element, {
+  // defaults go here
+});
 ```
 
 ### Options
