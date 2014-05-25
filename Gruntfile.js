@@ -12,6 +12,12 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc'
       }
     },
+    copy: {
+      build: {
+        src: 'src/elopts.js',
+        dest: 'build/elopts.js'
+      }
+    }, 
     uglify: {
       options: {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
@@ -34,13 +40,14 @@ module.exports = function(grunt) {
   });
 
   // load tasks
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   
   grunt.registerTask('test', ['jshint', 'jasmine']);
 
-  grunt.registerTask('build', ['uglify']);
+  grunt.registerTask('build', ['copy', 'uglify']);
   grunt.registerTask('default', ['build']);
   
 };
