@@ -27,12 +27,22 @@ Basic Usage
 var element = document.getElementById('test');
 var options = elopts(element);
 // print result
-console.log(JSON.stringify(options));
+console.log(JSON.stringify(options, null, 2));
 ```
 
 This will print out the following:
 ```js
-{"param1":"test4","param2":"test4","option":"test1","json":["test2"],"data":{"result":"test3"}}
+log: {
+  "param1": "test4",
+  "param2": "test4",
+  "option": "test1",
+  "json": [
+    "test2"
+  ],
+  "data": {
+    "result": "test3"
+  }
+}
 ```
 
 #### Merge default options into the result
