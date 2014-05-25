@@ -183,11 +183,11 @@ var elopts = (function() {
     return func;
   }
   
-  if (typeof define == 'function') {
+  try {
     define(function() {
       return newInstance();
     });
-  }
+  } catch (e) {}
   
   return newInstance();
   
