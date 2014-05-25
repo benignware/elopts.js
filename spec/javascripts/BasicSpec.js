@@ -9,7 +9,7 @@ describe("Basic", function() {
   
   var element = $('#test')[0];
   var options = elopts(element);
-    
+  
   it("options.option should return 'test1'", function() {
     expect(options.option === 'test1').toBeTruthy();
   });
