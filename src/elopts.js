@@ -6,7 +6,7 @@ var elopts = (function() {
     for (var property in source) {
       if (source[property] && source[property].constructor &&
        source[property].constructor === Object) {
-        destination[property] = destination[property] || {};
+        destination[property] = destination[property] || null;
         arguments.callee(destination[property], source[property]);
       } else {
         destination[property] = source[property];
@@ -129,7 +129,6 @@ var elopts = (function() {
           result[this.options.queryName] = queryString(src);
         }
         
-        
         if (this.options.params && src != null) {
           // parse query params from src-attribute
           result = deepExtend(result, queryParams(src));
@@ -140,9 +139,12 @@ var elopts = (function() {
           result = deepExtend(result, dataset(object));
         }
         
-        if (this.options.cdata) {
+        if (this.options.cdata && !result[this.options.cdataName]) {
           // cdata-json
-          result[this.options.cdataName] = result[this.options.cdataName] || cdataJson(object);
+          var json = cdataJson(object);
+          if (json) {
+            result[this.options.cdataName] = json;
+          }
         }
         
       } else if (typeof object == 'object' && !object.nodeType) {
