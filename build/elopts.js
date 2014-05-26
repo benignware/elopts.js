@@ -23,7 +23,12 @@ var elopts = (function() {
     }).slice(1);
   };
   
-  // parse query parameters from a string
+  // parse query-string from url
+  function queryString(url) {
+    return url.split("?")[1];
+  }
+  
+  // parse query-parameters from a string
   // adopted from: http://stackoverflow.com/questions/18022683/how-to-access-request-query-string-parameters-in-javascript
   // TODO: recursively parse query object syntax: object[key]=value etc.
   function queryParams(url) {
@@ -120,6 +125,11 @@ var elopts = (function() {
         
         var src = object.getAttribute('src');
         
+        if (this.options.query) {
+          result[this.options.queryName] = queryString(src);
+        }
+        
+        
         if (this.options.params && src != null) {
           // parse query params from src-attribute
           result = deepExtend(result, queryParams(src));
@@ -169,7 +179,9 @@ var elopts = (function() {
     dataset: true, 
     cdata: true, 
     cdataName: 'data', 
-    params: true
+    params: true, 
+    query: true, 
+    queryName: "query""
   };
   
   // helper plugin
