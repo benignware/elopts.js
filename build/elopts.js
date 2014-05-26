@@ -181,7 +181,7 @@ var elopts = (function() {
     cdataName: 'data', 
     params: true, 
     query: true, 
-    queryName: "query""
+    queryName: "query"
   };
   
   // helper plugin
