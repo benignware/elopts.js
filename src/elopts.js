@@ -6,7 +6,7 @@ var elopts = (function() {
     for (var property in source) {
       if (source[property] && source[property].constructor &&
        source[property].constructor === Object) {
-        destination[property] = destination[property] || null;
+        destination[property] = destination[property] || {};
         arguments.callee(destination[property], source[property]);
       } else {
         destination[property] = source[property];
@@ -91,9 +91,9 @@ var elopts = (function() {
   
   // parses a data-section containing json from an element
   function cdataJson( element ) {
-    var string = element.textContent.replace(/^\s*<\!\[CDATA\[/m, "").replace(/\]\]>\s*$/m, "");
-    var json = null;
-    if (string) {
+    var json = null, string = element.textContent;
+    if (string.match(/\s*<\!\[CDATA\[/)) {
+      string = string.replace(/^\s*<\!\[CDATA\[\s*/m, "").replace(/\]\]>\s*$/m, "");
       try {
         json = JSON.parse(string);
       } catch (e) {
@@ -120,6 +120,8 @@ var elopts = (function() {
       
       result = {};
       
+      
+      
       if (object.nodeType == 1) {
         // dom-element
         
@@ -141,6 +143,7 @@ var elopts = (function() {
         
         if (this.options.cdata && !result[this.options.cdataName]) {
           // cdata-json
+          
           var json = cdataJson(object);
           if (json) {
             result[this.options.cdataName] = json;
