@@ -18,13 +18,17 @@ var elopts = (function() {
   // converts a string to camelcase
   // http://stackoverflow.com/questions/10425287/convert-string-to-camelcase-with-regular-expression
   function camelize(string) {
-    return string[0].toLowerCase() + string.replace(/-([a-z])/g, function(a, b) {
+    console.log("camelize: ", string);
+    if (!string || !string.length) return string;
+    var firstChar = string.substring(0, 1);
+    return firstChar.toLowerCase() + string.replace(/-([a-z])/g, function(a, b) {
         return b.toUpperCase();
     }).slice(1);
   };
   
   // parse query-string from url
   function queryString(url) {
+    console.log("get qury string: ", url);
     return url.split("?")[1];
   }
   
@@ -91,13 +95,17 @@ var elopts = (function() {
   
   // parses a data-section containing json from an element
   function cdataJson( element ) {
-    var json = null, string = element.textContent;
+    var json = null, string = element.textContent || element.innerText || element.innerHTML;
     if (string.match(/\s*<\!\[CDATA\[/)) {
       string = string.replace(/^\s*<\!\[CDATA\[\s*/m, "").replace(/\]\]>\s*$/m, "");
-      try {
-        json = JSON.parse(string);
-      } catch (e) {
-        throw('Invalid json in cdata-section');
+      if (JSON && JSON.parse) {
+        try {
+          json = JSON.parse(string);
+        } catch (e) {
+          console.log("error parsing json");
+        }
+      } else {
+        console.log("json not supported");
       }
     }
     return json;
@@ -119,8 +127,6 @@ var elopts = (function() {
     function getOptions(object) {
       
       result = {};
-      
-      
       
       if (object.nodeType == 1) {
         // dom-element
