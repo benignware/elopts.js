@@ -18,7 +18,6 @@ var elopts = (function() {
   // converts a string to camelcase
   // http://stackoverflow.com/questions/10425287/convert-string-to-camelcase-with-regular-expression
   function camelize(string) {
-    console.log("camelize: ", string);
     if (!string || !string.length) return string;
     var firstChar = string.substring(0, 1);
     return firstChar.toLowerCase() + string.replace(/-([a-z])/g, function(a, b) {
@@ -28,7 +27,6 @@ var elopts = (function() {
   
   // parse query-string from url
   function queryString(url) {
-    console.log("get qury string: ", url);
     return url.split("?")[1];
   }
   
@@ -102,10 +100,10 @@ var elopts = (function() {
         try {
           json = JSON.parse(string);
         } catch (e) {
-          console.log("error parsing json");
+          //console.log("error parsing json");
         }
       } else {
-        console.log("json not supported");
+        //console.log("json not supported");
       }
     }
     return json;
