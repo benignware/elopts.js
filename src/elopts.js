@@ -35,10 +35,13 @@ var elopts = (function() {
   // TODO: recursively parse query object syntax: object[key]=value etc.
   function queryParams(url) {
     var result = {};
-    var pairs = url.split(/[\?&]+/);
-    for (var i = 0; i < pairs.length; i++) {
-      var pair = pairs[i].split("=");
-      result[pair[0]] = pair[1];
+    var query = url.split(/[\?]/)[1];
+    if (query) {
+      var pairs = query.split(/[&]+/);
+      for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i].split("=");
+        result[pair[0]] = pair[1];
+      }
     }
     return result;
   }
@@ -123,61 +126,50 @@ var elopts = (function() {
     deepExtend(this.options, options);
     
     function getOptions(object) {
-      
       result = {};
       
       if (object.nodeType == 1) {
         // dom-element
-        
-        var src = object.getAttribute('src');
-        
-        if (this.options.query) {
-          result[this.options.queryName] = queryString(src);
+        var src = object.src;
+        if (src !== null) {
+          result.src = src;
+          if (this.options.query) {
+            result[this.options.queryName] = queryString(src);
+          }
+          if (this.options.params) {
+            // parse query params from src-attribute
+            result = deepExtend(result, queryParams(src));
+          }
         }
-        
-        if (this.options.params && src != null) {
-          // parse query params from src-attribute
-          result = deepExtend(result, queryParams(src));
-        }
-        
         if (this.options.dataset) {
           // resolve dataset
           result = deepExtend(result, dataset(object));
         }
-        
         if (this.options.cdata && !result[this.options.cdataName]) {
           // cdata-json
-          
           var json = cdataJson(object);
           if (json) {
             result[this.options.cdataName] = json;
           }
         }
-        
       } else if (typeof object == 'object' && !object.nodeType) {
         // merge object into result
         result = deepExtend(result, object);
       }
-      
       if (this.options.json) {
         // parse json values
         result = deepJson(result);
       }
-      
       return result;
-      
     }
     
     this.get = function(objects /* ... */) {
-      
       var result = {};
-      
       for (var i = arguments.length - 1; i >= 0; i--) {
         var arg = arguments[i];
         var opts = getOptions.call(this, arg);
         result = deepExtend(result, opts);
       }
-      
       return result;
     };
     
